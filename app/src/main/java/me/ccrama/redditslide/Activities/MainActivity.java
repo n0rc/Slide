@@ -1363,6 +1363,13 @@ public class MainActivity extends BaseActivity
 
             drawerSubList.addHeaderView(header, null, false);
             ((TextView) header.findViewById(R.id.name)).setText(Authentication.name);
+
+            header.findViewById(R.id.change_client_id).setOnClickListener(new OnSingleClickListener() {
+                @Override
+                public void onSingleClick(View view) {
+                    changeClientId();
+                }
+            });
             header.findViewById(R.id.multi).setOnClickListener(new OnSingleClickListener() {
                 @Override
                 public void onSingleClick(View view) {
@@ -1836,6 +1843,12 @@ public class MainActivity extends BaseActivity
                     MainActivity.this.startActivity(inte);
                 }
             });
+            header.findViewById(R.id.change_client_id).setOnClickListener(new OnSingleClickListener() {
+                @Override
+                public void onSingleClick(View view) {
+                    changeClientId();
+                }
+            });
             header.findViewById(R.id.offline).setOnClickListener(new OnSingleClickListener() {
                 @Override
                 public void onSingleClick(View view) {
@@ -2173,6 +2186,35 @@ public class MainActivity extends BaseActivity
                 }
             }
         });
+    }
+
+    private void changeClientId() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+
+        View layout = getLayoutInflater().inflate(R.layout.client_data_dialog, null);
+        builder.setView(layout);
+
+        EditText inputId = layout.findViewById(R.id.client_id_input);
+        EditText inputUrl = layout.findViewById(R.id.redirect_url_input);
+        inputId.setText(Authentication.authentication.getString("CLIENT_ID", ""));
+        inputUrl.setText(Authentication.authentication.getString("REDIRECT_URL", Authentication.REDIRECT_URL_FALLBACK));
+        inputId.requestFocus();
+
+        builder.setPositiveButton("Save & Restart App", (dialog, which) -> {
+                String clientId = inputId.getText().toString();
+                String redirectUrl = inputUrl.getText().toString();
+                if (! redirectUrl.matches("https?://.+")) {
+                    redirectUrl = Authentication.REDIRECT_URL_FALLBACK;
+                }
+                Authentication.authentication.edit()
+                        .putString("CLIENT_ID", clientId)
+                        .putString("REDIRECT_URL", redirectUrl)
+                        .commit();
+                Reddit.forceRestart(MainActivity.this, true);
+            });
+
+        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
+        builder.show();
     }
 
     public void doPageSelectedComments(int position) {

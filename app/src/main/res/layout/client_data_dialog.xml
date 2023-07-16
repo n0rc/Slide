@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="20dp"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/client_id_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Client ID" />
+
+    <EditText
+        android:id="@+id/client_id_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Your App Client ID"
+        android:maxLength="64"
+        android:textColor="#FFFFFF" />
+
+    <TextView
+        android:id="@+id/redirect_url_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Redirect URL" />
+
+    <EditText
+        android:id="@+id/redirect_url_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="http://does.not.really.matter"
+        android:maxLength="64"
+        android:textColor="#FFFFFF" />
+
+</LinearLayout>

@@ -46,8 +46,6 @@ import me.ccrama.redditslide.util.LogUtil;
  * Created by ccrama on 5/27/2015.
  */
 public class Login extends BaseActivityAnim {
-    private static final String CLIENT_ID    = "KI2Nl9A_ouG9Qw";
-    private static final String REDIRECT_URL = "http://www.ccrama.me";
     Dialog                           d;
     CaseInsensitiveArrayList subNames;
 
@@ -74,7 +72,10 @@ public class Login extends BaseActivityAnim {
             new Authentication(getApplicationContext());
         }
         final OAuthHelper oAuthHelper = Authentication.reddit.getOAuthHelper();
-        final Credentials credentials = Credentials.installedApp(CLIENT_ID, REDIRECT_URL);
+        final Credentials credentials = Credentials.installedApp(
+                Authentication.authentication.getString("CLIENT_ID", ""),
+                Authentication.authentication.getString("REDIRECT_URL", Authentication.REDIRECT_URL_FALLBACK)
+        );
         String authorizationUrl =
                 oAuthHelper.getAuthorizationUrl(credentials, true, scopes).toExternalForm();
         authorizationUrl = authorizationUrl.replace("www.", "i.");
