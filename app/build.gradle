@@ -40,7 +40,7 @@ android {
         }
         debug {
             applicationIdSuffix ".debug"
-            resValue "string", "app_name", "Slide Debug"
+            resValue "string", "app_name", "Slide"
         }
     }
 
