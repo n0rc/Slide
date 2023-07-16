@@ -1,3 +1,20 @@
+## Info about this fork
+
+This fork contains a modification of Slide that allows changing the Client ID of the app.
+This modification was necessary to deal with Reddit's API changes from July 1, 2023.
+
+To get Slide working again follow these steps:
+
+1. Go to https://www.reddit.com/prefs/apps → create app
+2. Choose a name and **installed app**
+3. Insert any **redirect uri**, e.g. http://127.0.0.1
+4. Copy the Client ID of your newly created app (shown below the words "installed app" below your app name)
+5. Start Slide
+6. Choose *Change Client ID* from the drawer menu
+7. Paste the Client ID from step 4
+8. Insert the Redirect URL from step 3
+9. Save and restart Slide
+
 ## Current project status
 
 This project will be on indefinite hiatus for the foreseeable future, and may not be maintained.
