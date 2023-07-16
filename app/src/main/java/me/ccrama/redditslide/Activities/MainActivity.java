@@ -1364,12 +1364,6 @@ public class MainActivity extends BaseActivity
             drawerSubList.addHeaderView(header, null, false);
             ((TextView) header.findViewById(R.id.name)).setText(Authentication.name);
 
-            header.findViewById(R.id.change_client_id).setOnClickListener(new OnSingleClickListener() {
-                @Override
-                public void onSingleClick(View view) {
-                    changeClientId();
-                }
-            });
             header.findViewById(R.id.multi).setOnClickListener(new OnSingleClickListener() {
                 @Override
                 public void onSingleClick(View view) {
