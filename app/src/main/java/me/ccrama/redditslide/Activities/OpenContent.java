@@ -39,7 +39,7 @@ public class OpenContent extends Activity {
             finish();
             return;
         }
-        url = url.toLowerCase(Locale.ENGLISH);
+        //url = url.toLowerCase(Locale.ENGLISH);
         OpenRedditLink.openUrl(this, url, true);
     }
 
@@ -75,7 +75,7 @@ public class OpenContent extends Activity {
             finish();
             return;
         }
-        url = url.toLowerCase(Locale.ENGLISH);
+        //url = url.toLowerCase(Locale.ENGLISH);
 
         Log.v(LogUtil.getTag(), url);
 
