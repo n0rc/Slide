@@ -4,10 +4,13 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.StrictMode;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.List;
 import java.util.Objects;
 
@@ -234,6 +237,27 @@ public class OpenRedditLink {
                 i.putExtra(Profile.EXTRA_PROFILE, name);
                 break;
             }
+            case SHARED: {
+                // fetch the actual reddit url from HTTP HEAD response header "location" and call this method again
+                StrictMode.ThreadPolicy gfgPolicy = new StrictMode.ThreadPolicy.Builder().permitNetwork().build();
+                StrictMode.setThreadPolicy(gfgPolicy);
+                HttpURLConnection urlConnection = null;
+                try {
+                    URL newUrl = new URL(url);
+                    urlConnection = (HttpURLConnection) newUrl.openConnection();
+                    urlConnection.setRequestMethod("HEAD");
+                    urlConnection.setInstanceFollowRedirects(false);
+                    url = urlConnection.getHeaderField("location");
+                } catch (Exception e) {
+                    url = "";
+                    e.printStackTrace();
+                } finally {
+                    if (urlConnection != null) {
+                        urlConnection.disconnect();
+                    }
+                }
+                return openUrl(context, url, openIfOther);
+            }
             case HOME: {
                 i = new Intent(context, MainActivity.class);
                 break;
@@ -387,6 +411,9 @@ public class OpenRedditLink {
         } else if (path.matches("(?i)/r/[a-z0-9-_.]+/search.*")) {
             // Wiki link. Format: reddit.com/r/$subreddit/search?q= [optional]
             return RedditLinkType.SEARCH;
+        } else if (path.matches("(?i)/r/[a-z0-9-_.]+/s/.*")) {
+            // Shared link. Format: reddit.com/r/$subreddit/s/
+            return RedditLinkType.SHARED;
         } else if (path.matches("(?i)/r/[a-z0-9-_.]+/submit.*")) {
             // Submit post link. Format: reddit.com/r/$subreddit/submit
             return RedditLinkType.SUBMIT;
@@ -421,6 +448,7 @@ public class OpenRedditLink {
         SHORTENED,
         WIKI,
         COMMENT_PERMALINK,
+        SHARED,
         SUBMISSION,
         SUBMISSION_WITHOUT_SUB,
         SUBREDDIT,

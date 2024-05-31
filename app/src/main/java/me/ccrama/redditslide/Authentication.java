@@ -32,6 +32,8 @@ import okhttp3.Protocol;
  */
 public class Authentication {
     public static final String      REDIRECT_URL_FALLBACK = "http://127.0.0.1";
+    public static final String      CLIENT_ID_FALLBACK = "";
+    public static final String      USER_AGENT = "me.ccrama.RedditSlide:v" + BuildConfig.VERSION_NAME;
     public static boolean           isLoggedIn;
     public static RedditClient      reddit;
     public static LoggedInAccount   me;
@@ -63,9 +65,7 @@ public class Authentication {
             hasDone = true;
             httpAdapter = new OkHttpAdapter(Reddit.client, Protocol.HTTP_2);
             isLoggedIn = false;
-            reddit = new RedditClient(
-                    UserAgent.of("android:me.ccrama.RedditSlide:v" + BuildConfig.VERSION_NAME),
-                    httpAdapter);
+            reddit = new RedditClient(UserAgent.of(USER_AGENT), httpAdapter);
             reddit.setRetryLimit(2);
             if (BuildConfig.DEBUG) reddit.setLoggingMode(LoggingMode.ALWAYS);
             didOnline = true;
@@ -95,8 +95,7 @@ public class Authentication {
         if (reddit == null) {
             hasDone = true;
             isLoggedIn = false;
-            reddit = new RedditClient(
-                    UserAgent.of("android:me.ccrama.RedditSlide:v" + BuildConfig.VERSION_NAME));
+            reddit = new RedditClient(UserAgent.of(USER_AGENT));
             reddit.setLoggingMode(LoggingMode.ALWAYS);
             didOnline = true;
 
@@ -127,7 +126,7 @@ public class Authentication {
 
                             final Credentials credentials =
                                     Credentials.installedApp(
-                                            authentication.getString("CLIENT_ID", ""),
+                                            authentication.getString("CLIENT_ID", CLIENT_ID_FALLBACK),
                                             authentication.getString("REDIRECT_URL", REDIRECT_URL_FALLBACK)
                                     );
                             Log.v(LogUtil.getTag(), "REAUTH LOGGED IN");
@@ -170,7 +169,7 @@ public class Authentication {
 
                     } else {
                         final Credentials fcreds =
-                                Credentials.userlessApp(authentication.getString("CLIENT_ID", ""), UUID.randomUUID());
+                                Credentials.userlessApp(authentication.getString("CLIENT_ID", CLIENT_ID_FALLBACK), UUID.randomUUID());
                         OAuthData authData;
                         if (BuildConfig.DEBUG) LogUtil.v("Not logged in");
                         try {
@@ -257,7 +256,7 @@ public class Authentication {
             if (!lastToken.isEmpty()) {
 
                 Credentials credentials = Credentials.installedApp(
-                        authentication.getString("CLIENT_ID", ""),
+                        authentication.getString("CLIENT_ID", CLIENT_ID_FALLBACK),
                         authentication.getString("REDIRECT_URL", REDIRECT_URL_FALLBACK)
                 );
                 OAuthHelper oAuthHelper = baseReddit.getOAuthHelper();
@@ -311,7 +310,7 @@ public class Authentication {
                 if (BuildConfig.DEBUG) LogUtil.v("NOT LOGGED IN");
 
                 final Credentials fcreds =
-                        Credentials.userlessApp(authentication.getString("CLIENT_ID", ""), UUID.randomUUID());
+                        Credentials.userlessApp(authentication.getString("CLIENT_ID", CLIENT_ID_FALLBACK), UUID.randomUUID());
                 OAuthData authData;
                 try {
 

@@ -73,7 +73,7 @@ public class Login extends BaseActivityAnim {
         }
         final OAuthHelper oAuthHelper = Authentication.reddit.getOAuthHelper();
         final Credentials credentials = Credentials.installedApp(
-                Authentication.authentication.getString("CLIENT_ID", ""),
+                Authentication.authentication.getString("CLIENT_ID", Authentication.CLIENT_ID_FALLBACK),
                 Authentication.authentication.getString("REDIRECT_URL", Authentication.REDIRECT_URL_FALLBACK)
         );
         String authorizationUrl =

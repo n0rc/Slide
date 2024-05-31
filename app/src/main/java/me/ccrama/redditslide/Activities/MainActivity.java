@@ -2190,12 +2190,15 @@ public class MainActivity extends BaseActivity
 
         EditText inputId = layout.findViewById(R.id.client_id_input);
         EditText inputUrl = layout.findViewById(R.id.redirect_url_input);
-        inputId.setText(Authentication.authentication.getString("CLIENT_ID", ""));
+        inputId.setText(Authentication.authentication.getString("CLIENT_ID", Authentication.CLIENT_ID_FALLBACK));
         inputUrl.setText(Authentication.authentication.getString("REDIRECT_URL", Authentication.REDIRECT_URL_FALLBACK));
         inputId.requestFocus();
 
         builder.setPositiveButton("Save & Restart App", (dialog, which) -> {
                 String clientId = inputId.getText().toString();
+                if (clientId.isEmpty()) {
+                    clientId = Authentication.CLIENT_ID_FALLBACK;
+                }
                 String redirectUrl = inputUrl.getText().toString();
                 if (! redirectUrl.matches("https?://.+")) {
                     redirectUrl = Authentication.REDIRECT_URL_FALLBACK;
